@@ -1,0 +1,19 @@
+# =============================================================================
+#  /etc/cron.d/tarea32-respaldos - Calendario de respaldos (Tarea 3.2)
+#
+#  Formato: minuto hora dia_mes mes dia_semana USUARIO comando
+#           dia_semana: 0 o 7 = domingo, 1 = lunes ... 6 = sabado
+# =============================================================================
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+MAILTO=""
+
+# Respaldo COMPLETO: domingo a las 02:00
+0 2 * * 0     root  /usr/local/sbin/backup.sh completo     >/dev/null 2>&1
+
+# Respaldo DIFERENCIAL: lunes a sabado a las 02:00
+0 2 * * 1-6   root  /usr/local/sbin/backup.sh diferencial  >/dev/null 2>&1
+
+# Simulacro de restauracion: primer dia de cada mes a las 04:00 (verifica
+# que el ultimo respaldo se puede leer y restaurar en /var/tmp)
+0 4 1 * *     root  /usr/local/sbin/restaurar.sh --ultimo --destino /var/tmp/simulacro_mensual --si >/dev/null 2>&1 && rm -rf /var/tmp/simulacro_mensual

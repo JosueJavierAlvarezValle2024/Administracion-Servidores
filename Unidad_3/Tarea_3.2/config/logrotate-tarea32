@@ -1,0 +1,10 @@
+# /etc/logrotate.d/tarea32 - Rotacion del log de respaldos
+/var/log/tarea32_backup.log /var/log/tarea32.log {
+    weekly
+    rotate 8
+    compress
+    delaycompress
+    missingok
+    notifempty
+    create 0600 root root
+}

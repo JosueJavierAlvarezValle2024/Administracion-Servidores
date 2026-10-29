@@ -1,0 +1,10 @@
+# =============================================================================
+#  /etc/cron.d/tarea32-demo - Calendario de DEMOSTRACION para el video
+#  Respaldo incremental cada 5 minutos. Quitalo al terminar:
+#     sudo bash scripts/03_instalar_respaldos.sh --sin-demo
+# =============================================================================
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+MAILTO=""
+
+*/5 * * * *   root  /usr/local/sbin/backup.sh incremental  >/dev/null 2>&1

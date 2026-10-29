@@ -1,0 +1,9 @@
+usuario,nombre_completo,departamento,rol,grupos_extra,expira_cuenta
+ana.torres,Ana Torres,sistemas,jefe,,2027-06-30
+luis.rios,Luis Rios,sistemas,tecnico,adm,2027-06-30
+maria.lopez,Maria Lopez,finanzas,jefe,,2027-06-30
+pedro.ruiz,Pedro Ruiz,finanzas,analista,,2027-06-30
+sofia.diaz,Sofia Diaz,finanzas,auxiliar,,2026-12-31
+carlos.vega,Carlos Vega,operaciones,jefe,,2027-06-30
+laura.mena,Laura Mena,operaciones,operador,,2027-06-30
+jorge.cano,Jorge Cano,operaciones,operador,horario_prueba,2026-12-31

@@ -1,0 +1,9 @@
+# Lineas que 00_preparar_discos.sh agrega a /etc/fstab (los UUID cambian en cada equipo)
+#
+# <dispositivo>                             <punto>         <tipo> <opciones>                          <dump> <fsck>
+UUID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  /srv/empresa    ext4   defaults,usrquota,grpquota,nofail   0      2   # TAREA32
+UUID=yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy  /mnt/respaldos  ext4   defaults,noauto,nofail              0      2   # TAREA32
+#
+# usrquota,grpquota : activan la aplicacion de cuotas de usuario y grupo
+# noauto            : el medio de respaldos NO se monta al arrancar (queda fuera de linea)
+# nofail            : si el disco falta, el sistema arranca igual
