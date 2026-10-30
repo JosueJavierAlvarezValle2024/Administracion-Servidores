@@ -93,7 +93,7 @@ Se eligió **diferencial** para los días normales. Así, en el peor caso solo h
 | **RTO** `/srv/empresa` completo | Tiempo para recuperar todas las carpetas departamentales | **≤ 1 hora** | Completo + 1 diferencial |
 | **RTO** servidor completo | Reinstalación + `/etc` + datos | **≤ 4 horas** | Incluye reinstalar el sistema operativo |
 
-**Tiempo medido en el simulacro:** ______ segundos (lo reporta `04_simulacro_restauracion.sh`).
+**Tiempo medido en el simulacro (30/10/2026):** **3 segundos** para recuperar una carpeta de Finanzas borrada (≈ 2 MB), aplicando la cadena completo + incrementales. Contenido, dueño, permisos y ACL quedaron idénticos al original. El objetivo de RTO para archivos individuales (≤ 15 min) se cumple con amplio margen.
 
 ## 7. Verificación
 
