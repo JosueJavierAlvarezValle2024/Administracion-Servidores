@@ -1,0 +1,9 @@
+# Videos y grabaciones (se entregan por YouTube, no por GitHub)
+*.mp4
+*.mkv
+*.mov
+*.avi
+
+# Temporales de Windows y Office
+*.tmp
+~$*

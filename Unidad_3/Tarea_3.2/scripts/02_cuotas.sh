@@ -32,10 +32,11 @@ declare -A CUOTA_GRUPO=(
 GRACIA=86400   # periodo de gracia: 1 dia (segundos)
 
 mountpoint -q "$FS" || { error "$FS no es un disco montado: ejecuta 00_preparar_discos.sh"; exit 1; }
-if ! quotaon -pu "$FS" 2>/dev/null | grep -q ' is on'; then
+# LC_ALL=C: mensajes en ingles para poder reconocer "is on" en cualquier idioma
+if ! LC_ALL=C quotaon -pu "$FS" 2>/dev/null | grep -q ' is on'; then
     quotaon -ug "$FS" 2>/dev/null || true
 fi
-quotaon -pug "$FS" | grep -q ' is on' || { error "Las cuotas no estan activas en $FS"; exit 1; }
+LC_ALL=C quotaon -pug "$FS" | grep -q ' is on' || { error "Las cuotas no estan activas en $FS"; exit 1; }
 
 titulo "Periodo de gracia"
 setquota -u -t "$GRACIA" "$GRACIA" "$FS"

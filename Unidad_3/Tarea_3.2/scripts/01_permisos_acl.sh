@@ -31,7 +31,9 @@ base() {
     mkdir -p "$ruta"
     setfacl -b "$ruta"          # quitar ACL anteriores para aplicar desde cero
     chown "$dueno" "$ruta"
-    chmod "$modo" "$ruta"
+    # Se antepone un 0 (ej. 02770): en directorios, GNU chmod con 4 digitos
+    # conserva un setuid previo; con 5 digitos lo quita explicitamente
+    chmod "0$modo" "$ruta"
 }
 
 mostrar() { echo; stat -c '%A  %U:%G  %n' "$1"; getfacl -pc "$1" | sed 's/^/    /'; }
