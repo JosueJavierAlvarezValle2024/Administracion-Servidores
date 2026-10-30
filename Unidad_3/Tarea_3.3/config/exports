@@ -1,0 +1,11 @@
+# =============================================================================
+#  /etc/exports - Exportaciones NFS del RAID (Tarea 3.3)
+#  Aplicar cambios:  sudo exportfs -ra      Ver:  sudo exportfs -v
+#
+#  rw               : lectura y escritura
+#  sync             : confirma la escritura solo cuando ya esta en disco
+#  no_subtree_check : evita problemas cuando se renombran archivos
+#  root_squash      : el root del cliente se convierte en "nobody" (seguridad)
+# =============================================================================
+/srv/raid/compartido/general      192.168.56.0/24(rw,sync,no_subtree_check,root_squash)  127.0.0.1(rw,sync,no_subtree_check,root_squash)
+/srv/raid/compartido/operaciones  192.168.56.0/24(ro,sync,no_subtree_check,root_squash)  127.0.0.1(ro,sync,no_subtree_check,root_squash)
