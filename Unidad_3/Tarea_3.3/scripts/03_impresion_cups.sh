@@ -34,17 +34,23 @@ info "Dispositivos (backends): $(lpinfo -v 2>/dev/null | grep -o 'cups-pdf:/' | 
 # crear_cola <nombre> <descripcion> <prioridad> <permitidos|todos> [opciones extra...]
 crear_cola() {
     local nombre="$1" desc="$2" prio="$3" permitidos="$4"; shift 4
+    # Si la cola ya existe, se quita su restriccion de usuarios y se borra
+    lpadmin -p "$nombre" -u allow:all 2>/dev/null || true
     lpadmin -x "$nombre" 2>/dev/null || true
     lpadmin -p "$nombre" -E -v cups-pdf:/ -m "$PPD" \
             -D "$desc" -L "Servidor Xubuntu - $DIR_COMPARTIDO" \
             -o printer-is-shared=true \
-            -o job-priority-default="$prio" "$@"
+            -o job-priority-default="$prio" "$@" 2>&1 | grep -v 'deprecated' || true
+    # Activar y aceptar trabajos ANTES de restringir usuarios
+    cupsenable "$nombre"; cupsaccept "$nombre"
+    # La lista de permitidos tambien aplica a root: se incluye para que pueda
+    # administrar la cola y cancelar trabajos
     if [[ "$permitidos" == "todos" ]]; then
         lpadmin -p "$nombre" -u allow:all
     else
-        lpadmin -p "$nombre" -u "allow:$permitidos"
+        lpadmin -p "$nombre" -u "allow:root,$permitidos"
     fi
-    cupsenable "$nombre"; cupsaccept "$nombre"
+    lpstat -p "$nombre" &>/dev/null || { error "No se pudo crear la cola $nombre"; exit 1; }
     ok "Cola $nombre | prioridad $prio | permitidos: $permitidos"
 }
 
