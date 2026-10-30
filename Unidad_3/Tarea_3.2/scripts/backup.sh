@@ -54,7 +54,7 @@ log() {
     linea="$(date '+%F %T') [$1] $2"
     echo "$linea"
     echo "$linea" >> "$LOG"
-    if [[ -n "$LOG_EJECUCION" ]]; then echo "$linea" >> "$LOG_EJECUCION"; fi
+    if [[ -n "$LOG_EJECUCION" ]]; then echo "$linea" >> "$LOG_EJECUCION" 2>/dev/null || true; fi
     logger -t backup.sh "[$1] $2" 2>/dev/null || true
 }
 
@@ -63,6 +63,8 @@ uso() { sed -n '2,30p' "$0" | sed 's/^# \{0,1\}//'; }
 MONTADO_POR_MI="no"
 al_salir() {
     local rc=$?
+    trap - ERR             # la limpieza final no debe disparar el manejador de errores
+    LOG_EJECUCION=""       # el log por ejecucion vive en el medio que se va a desmontar
     if [[ "$MONTADO_POR_MI" == "si" && "$DESMONTAR_AL_FINAL" == "si" ]]; then
         sync
         umount "$PUNTO_MONTAJE" && log INFO "Medio secundario desmontado ($PUNTO_MONTAJE)"

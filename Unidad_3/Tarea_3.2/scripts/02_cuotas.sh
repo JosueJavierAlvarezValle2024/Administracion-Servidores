@@ -67,8 +67,9 @@ for g in "${!CUOTA_GRUPO[@]}"; do
 done
 
 titulo "Reporte de cuotas (repquota)"
-repquota -us "$FS" | sed -n '1,40p'
+# -v: muestra tambien a quien aun no tiene archivos en el disco
+repquota -usv "$FS" | sed -n '1,40p'
 echo
-repquota -gs "$FS" | sed -n '1,40p'
+repquota -gsv "$FS" | sed -n '1,40p'
 
 info "Consultar a un usuario:  sudo quota -us <usuario>"
