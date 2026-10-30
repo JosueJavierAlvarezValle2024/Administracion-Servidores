@@ -32,11 +32,18 @@ declare -A CUOTA_GRUPO=(
 GRACIA=86400   # periodo de gracia: 1 dia (segundos)
 
 mountpoint -q "$FS" || { error "$FS no es un disco montado: ejecuta 00_preparar_discos.sh"; exit 1; }
-# LC_ALL=C: mensajes en ingles para poder reconocer "is on" en cualquier idioma
-if ! LC_ALL=C quotaon -pu "$FS" 2>/dev/null | grep -q ' is on'; then
+# Estado de las cuotas. Notas:
+#  - LC_ALL=C: mensaje en ingles ("is on") sin importar el idioma del sistema
+#  - quotaon -p devuelve codigo distinto de 0 cuando las cuotas ESTAN activas,
+#    por eso se guarda la salida y solo se revisa el texto
+estado_cuotas() { LC_ALL=C quotaon -pug "$FS" 2>&1 || true; }
+if ! estado_cuotas | grep -q 'user quota.* is on'; then
     quotaon -ug "$FS" 2>/dev/null || true
 fi
-LC_ALL=C quotaon -pug "$FS" | grep -q ' is on' || { error "Las cuotas no estan activas en $FS"; exit 1; }
+ESTADO="$(estado_cuotas)"
+echo "$ESTADO"
+grep -q 'user quota.* is on' <<< "$ESTADO" && grep -q 'group quota.* is on' <<< "$ESTADO" \
+    || { error "Las cuotas no estan activas en $FS"; exit 1; }
 
 titulo "Periodo de gracia"
 setquota -u -t "$GRACIA" "$GRACIA" "$FS"
