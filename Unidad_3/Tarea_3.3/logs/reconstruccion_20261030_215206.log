@@ -1,0 +1,26 @@
+2026-10-30 21:52:06 | Disco /dev/sde preparado como reemplazo (superbloque borrado)
+mdadm: added /dev/sde
+2026-10-30 21:52:06 | Disco /dev/sde agregado: inicia la reconstruccion
+2026-10-30 21:52:07 | recovery =  9.0% (94876/1046528) finish=0.1min speed=94876K/sec
+2026-10-30 21:52:10 | recovery = 56.9% (596020/1046528) finish=0.0min speed=149005K/sec
+2026-10-30 21:52:13 | Reconstruccion TERMINADA
+------ mdadm --detail /dev/md0 ------
+        Raid Level : raid5
+        Array Size : 2093056 (2044.00 MiB 2143.29 MB)
+             State : clean 
+    Active Devices : 3
+   Working Devices : 3
+    Failed Devices : 0
+       0       8       48        0      active sync   /dev/sdd
+       4       8       64        1      active sync   /dev/sde
+       3       8       80        2      active sync   /dev/sdf
+------ /proc/mdstat ------
+Personalities : [raid4] [raid5] [raid6] 
+md0 : active raid5 sde[4] sdf[3] sdd[0]
+      2093056 blocks super 1.2 level 5, 512k chunk, algorithm 2 [3/3] [UUU]
+      
+unused devices: <none>
+2026-10-30 21:52:14 | DATOS INTACTOS: el SHA-256 de /srv/raid/compartido/general/prueba_raid.bin coincide con el original
+------ Mensajes del kernel (md/raid) ------
+oct 30 21:52:06 Xubuntuu kernel: md: recover of RAID array md0
+oct 30 21:52:13 Xubuntuu kernel: md: md0: recover done.

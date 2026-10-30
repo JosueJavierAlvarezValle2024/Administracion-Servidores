@@ -1,0 +1,38 @@
+2026-10-30 21:29:22 | Arreglo /dev/md0 creado: RAID 5 con /dev/sdd /dev/sde /dev/sdf
+Personalities : [raid4] [raid5] [raid6] 
+md0 : active raid5 sdf[3] sde[1] sdd[0]
+      2093056 blocks super 1.2 level 5, 512k chunk, algorithm 2 [3/3] [UUU]
+      
+unused devices: <none>
+/dev/md0:
+           Version : 1.2
+     Creation Time : Fri Oct 30 21:29:21 2026
+        Raid Level : raid5
+        Array Size : 2093056 (2044.00 MiB 2143.29 MB)
+     Used Dev Size : 1046528 (1022.00 MiB 1071.64 MB)
+      Raid Devices : 3
+     Total Devices : 3
+       Persistence : Superblock is persistent
+
+       Update Time : Fri Oct 30 21:30:28 2026
+             State : clean 
+    Active Devices : 3
+   Working Devices : 3
+    Failed Devices : 0
+     Spare Devices : 0
+
+            Layout : left-symmetric
+        Chunk Size : 512K
+
+Consistency Policy : resync
+
+              Name : Xubuntuu:raid_empresa  (local to host Xubuntuu)
+              UUID : cc6b1a4a:4f6b28be:bced3612:531f287d
+            Events : 18
+
+    Number   Major   Minor   RaidDevice State
+       0       8       48        0      active sync   /dev/sdd
+       1       8       64        1      active sync   /dev/sde
+       3       8       80        2      active sync   /dev/sdf
+S.ficheros     Tamaño Usados  Disp Uso% Montado en
+/dev/md0         2,0G   552K  1,9G   1% /srv/raid
