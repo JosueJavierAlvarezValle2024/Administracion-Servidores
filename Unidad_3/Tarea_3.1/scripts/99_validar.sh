@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-#  99_validar.sh - Genera la evidencia de validacion (para capturas y video).
+#  99_validar.sh - Genera la evidencia de validacion de la configuracion.
 #
 #  Muestra grupos, cuentas, caducidad, permisos de homes, reglas de sudo,
 #  horarios y bloqueo; y ejecuta PRUEBAS AUTOMATICAS de aislamiento

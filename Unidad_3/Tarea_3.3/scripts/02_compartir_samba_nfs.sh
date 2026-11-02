@@ -8,8 +8,8 @@
 #
 #  Samba usa contrasenas propias (smbpasswd). El script genera una por
 #  usuario y las guarda en /root/tarea33_samba.csv (solo root).
-#  Para usar una contrasena conocida en la demostracion:
-#     sudo bash scripts/02_compartir_samba_nfs.sh --password Demo2026#
+#  Para asignar la misma contrasena a todos los usuarios:
+#     sudo bash scripts/02_compartir_samba_nfs.sh --password <clave>
 #
 #  Uso: sudo bash scripts/02_compartir_samba_nfs.sh [--password <clave>]
 # =============================================================================

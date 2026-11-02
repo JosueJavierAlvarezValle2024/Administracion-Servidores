@@ -22,8 +22,7 @@ Tarea_3.3/
 │   ├── smb.conf                    # -> /etc/samba/smb.conf
 │   └── exports                     # -> /etc/exports
 ├── logs/                           # raid_creacion_*, degradacion_*, reconstruccion_*
-├── docs/guion_video.md
-└── evidencias/
+└── evidencias/                     # Se crea al ejecutar 04_prueba_impresion.sh y 99_validar.sh
 ```
 
 ## Diseño
@@ -83,7 +82,7 @@ flowchart LR
 ```bash
 cd Unidad_3/Tarea_3.3
 sudo bash scripts/00_crear_raid.sh                 # pide escribir RAID
-sudo bash scripts/02_compartir_samba_nfs.sh        # o: --password Demo2026#
+sudo bash scripts/02_compartir_samba_nfs.sh        # o: --password <clave>
 sudo bash scripts/03_impresion_cups.sh
 sudo bash scripts/04_prueba_impresion.sh
 sudo bash scripts/01_simular_fallo.sh --fallo      # degrada el arreglo

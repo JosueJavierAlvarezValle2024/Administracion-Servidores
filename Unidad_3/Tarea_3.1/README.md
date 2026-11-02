@@ -52,7 +52,7 @@ flowchart TD
 | empleados | 3010 | Todos los empleados (carpeta general) |
 | jefes | 3011 | Jefes de área (carpeta de dirección) |
 | admin_ti | 3012 | Administradores con sudo total |
-| horario_prueba | 3099 | Grupo de demostración: acceso siempre denegado |
+| horario_prueba | 3099 | Control de la política de horarios: acceso siempre denegado |
 
 ## 2. Tabla de permisos por rol
 
@@ -91,7 +91,7 @@ Unidad_3/Tarea_3.1/
 │   ├── 06_bloqueo_intentos.sh   # pam_faillock
 │   ├── 98_revertir.sh           # Deshace todo
 │   └── 99_validar.sh            # Evidencia + pruebas automáticas
-└── evidencias/                  # Salida de 99_validar.sh
+└── evidencias/                  # Se crea al ejecutar 99_validar.sh
 ```
 
 ## 4. Uso
@@ -129,7 +129,7 @@ Los horarios se pueden cambiar sin editar el script:
 sudo HORARIO_FINANZAS="Al0000-2400" bash scripts/05_horarios_acceso.sh
 ```
 
-## 5. Pruebas manuales sugeridas (video)
+## 5. Pruebas de verificación
 
 | Prueba | Comando | Resultado esperado |
 |---|---|---|
@@ -146,6 +146,6 @@ sudo HORARIO_FINANZAS="Al0000-2400" bash scripts/05_horarios_acceso.sh
 ## 6. Notas para Ubuntu 25.10
 
 - El `sudo` por defecto es **sudo-rs**. Las reglas usan sintaxis compatible con sudo-rs y con el sudo clásico, y se validan con `visudo` antes de instalarse.
-- La política de bloqueo **también aplica al administrador**. Mientras pruebas, deja abierta una terminal con `sudo -i`.
+- La política de bloqueo **también aplica al administrador**. Al aplicar los cambios conviene tener abierta una terminal con `sudo -i`, por si una cuenta queda bloqueada.
 - Si LightDM tiene inicio de sesión automático, `00_ejecutar_todo.sh` lo avisa.
 - Si los scripts dan error `$'\r': command not found`, conviértelos a fin de línea Unix con `sed -i 's/\r$//' scripts/*.sh scripts/lib/*.sh`.

@@ -52,7 +52,6 @@ Los tiempos y la pérdida máxima de datos están definidos en la sección 6.
 | Domingo | 02:00 | Completo | `/etc/cron.d/tarea32-respaldos` |
 | Lunes a sábado | 02:00 | Diferencial | `/etc/cron.d/tarea32-respaldos` |
 | Día 1 de cada mes | 04:00 | Simulacro automático de restauración | `/etc/cron.d/tarea32-respaldos` |
-| *Demostración* | cada 5 min | Incremental | `/etc/cron.d/tarea32-demo` (solo para el video) |
 
 Se eligió **diferencial** para los días normales. Así, en el peor caso solo hacen falta 2 archivos para restaurar, lo que reduce el RTO.
 

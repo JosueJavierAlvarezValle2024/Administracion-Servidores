@@ -19,7 +19,7 @@
 source "$(dirname "$0")/lib/comun.sh"
 requiere_root
 
-# ---- Horarios por grupo (puedes ajustarlos para tu demostracion) ----
+# ---- Horarios por grupo (se pueden ajustar sin editar el script) ----
 HORARIO_FINANZAS="${HORARIO_FINANZAS:-Wk0800-1800}"      # L-V de 8:00 a 18:00
 HORARIO_OPERACIONES="${HORARIO_OPERACIONES:-Al0600-2200}" # diario 6:00 a 22:00
 HORARIO_PRUEBA="!Al0000-2400"                             # acceso denegado siempre

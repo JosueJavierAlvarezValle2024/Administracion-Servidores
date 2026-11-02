@@ -21,13 +21,11 @@ Tarea_3.2/
 ├── config/
 │   ├── backup.conf                  # Plantilla -> /etc/tarea32/backup.conf
 │   ├── tarea32-respaldos.cron       # Calendario  -> /etc/cron.d/
-│   ├── tarea32-demo.cron            # Cada 5 min, para el video
 │   ├── logrotate-tarea32            # -> /etc/logrotate.d/tarea32
 │   └── fstab.ejemplo                # Líneas que se agregan a /etc/fstab
 ├── docs/
-│   ├── politica_respaldos.md        # Política formal (RPO/RTO, retención, 3-2-1)
-│   └── guion_video.md               # Guion para grabar el video
-└── evidencias/                      # Salidas de 99_validar.sh y del simulacro
+│   └── politica_respaldos.md        # Política formal (RPO/RTO, retención, 3-2-1)
+└── evidencias/                      # Se crea al ejecutar 99_validar.sh y el simulacro
 ```
 
 ## Diseño de permisos
@@ -74,11 +72,10 @@ cd Unidad_3/Tarea_3.2
 sudo bash scripts/00_preparar_discos.sh          # pide escribir FORMATEAR
 sudo bash scripts/01_permisos_acl.sh
 sudo bash scripts/02_cuotas.sh
-sudo bash scripts/03_instalar_respaldos.sh --demo
+sudo bash scripts/03_instalar_respaldos.sh
 sudo backup.sh completo                          # primer respaldo manual
 sudo bash scripts/04_simulacro_restauracion.sh
 sudo bash scripts/99_validar.sh
-sudo bash scripts/03_instalar_respaldos.sh --sin-demo   # al terminar el video
 ```
 
 Si tus discos no se llaman `sdb` y `sdc`:
@@ -87,7 +84,7 @@ Si tus discos no se llaman `sdb` y `sdc`:
 sudo bash scripts/00_preparar_discos.sh --datos /dev/sdX --respaldos /dev/sdY
 ```
 
-## Comandos útiles para capturas
+## Comandos de verificación
 
 ```bash
 getfacl /srv/empresa/finanzas/reportes
