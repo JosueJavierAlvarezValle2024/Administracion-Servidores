@@ -2,7 +2,9 @@
 
 > **Cómo usar este guion:** primero graba **solo la pantalla, sin voz**, siguiendo los pasos y comandos. Después grábate con cámara y micrófono explicando ese video: los bloques **🎙️ Qué decir** están en el mismo orden que la grabación. Léelos como apoyo y dilo con tus palabras.
 
-Funciona a cualquier hora: las pruebas de inicio de sesión usan usuarios de **Sistemas**, que no tienen restricción de horario.
+**Graba entre las 06:00 y las 22:00:** laura.mena y carlos.vega son de **Operaciones**, que solo puede iniciar sesión en ese horario. Fuera de él, su `su -` dará *Permiso denegado* y las pruebas no saldrán como en el guion.
+
+**Regla del `exit`:** escribe `exit` solo cuando el `su -` **sí entró** (el prompt cambia a `laura.mena@...`). Si el `su -` falla, sigues siendo el administrador y no hay nada de qué salir: un `exit` ahí cerraría tu terminal.
 
 ## A. Preparar OBS (en Windows)
 
@@ -28,25 +30,25 @@ clear
 
 ## C. Grabación
 
-| # | Qué decir | Comandos |
-|---|---|---|
-| 1 | Nombre, materia, Tarea 3.1. "Voy a automatizar altas y bajas de usuarios y aplicar políticas de acceso." | — |
-| 2 | "Este es el lote de usuarios: tres departamentos con distintos roles." | `cat data/usuarios.csv` |
-| 3 | "Ejecuto la creación por lotes: grupos, usuarios, sudo, horarios y bloqueo." | `sudo bash scripts/00_ejecutar_todo.sh` |
-| 4 | "Cada usuario tiene grupo primario de su departamento y grupos secundarios según su rol." | `id ana.torres` · `id pedro.ruiz` · `getent group jefes` |
-| 5 | "La contraseña es temporal: caduca a los 90 días y la cuenta expira en una fecha definida." | `sudo chage -l pedro.ruiz` |
-| 6 | "Los homes son privados, modo 700." | `ls -ld /home/*` |
-| 7 | "Las contraseñas temporales solo las puede leer root." | `sudo cat /root/tarea31_credenciales.csv` |
-| 8 | **Contraseña forzada.** "Entro como luis.rios con la temporal y el sistema me obliga a cambiarla." | `su - luis.rios`. Pega la temporal (selecciónala y usa `Ctrl+Shift+C` / `Ctrl+Shift+V`), luego otra vez la temporal y dos veces la nueva (ej. `Soporte2026#Luis`) |
-| 9 | **Aislamiento.** "Como luis, no puedo entrar al home de otro ni a la carpeta de Finanzas, pero sí a la de Sistemas." | `ls /home/pedro.ruiz` ✗ · `ls /srv/empresa/finanzas` ✗ · `touch /srv/empresa/sistemas/prueba.txt` ✓ |
-| 10 | **sudo limitado.** "Luis es técnico: solo tiene comandos de soporte." | `sudo -l` · `sudo apt update` ✓ · `sudo cat /etc/shadow` ✗ · `exit` |
-| 11 | **sudo total.** "Ana es jefa de Sistemas, grupo admin_ti: puede todo." | `su - ana.torres` (cambia su contraseña) · `sudo head -3 /etc/shadow` ✓ · `exit` |
-| 12 | **Sin sudo.** "Finanzas no tiene privilegios." | `sudo -l -U pedro.ruiz` |
-| 13 | **Horario.** "jorge.cano pertenece a horario_prueba: nunca puede iniciar sesión. Finanzas solo de 8 a 18." | `grep -A8 'BEGIN TAREA31' /etc/security/time.conf` · `su - jorge.cano` → *Permiso denegado* (pon su contraseña correcta) |
-| 14 | **Bloqueo.** "Tres contraseñas incorrectas bloquean la cuenta 5 minutos." | `su - ana.torres` 3 veces con contraseña mala · 4.º intento con la **correcta** → bloqueada · `sudo faillock --user ana.torres` · `sudo faillock --user ana.torres --reset` · `su - ana.torres` ✓ · `exit` |
-| 15 | **Baja.** "Doy de baja a sofia.diaz: la cuenta queda bloqueada pero se conserva su información." | `sudo bash scripts/03_baja_usuarios.sh sofia.diaz` · `sudo passwd -S sofia.diaz` (muestra **L**) · `su - sofia.diaz` ✗ |
-| 16 | **Validación final.** "Este script comprueba de forma automática el aislamiento." | `sudo bash scripts/99_validar.sh` |
-| 17 | Cierre: "Con esto se automatizan las altas y bajas y se aplican las directivas de seguridad." | — |
+✓ = el comando debe funcionar · ✗ = el sistema debe negarlo (eso es lo que se quiere demostrar).
+
+| # | Qué decir | Comandos | Qué debe aparecer |
+|---|---|---|---|
+| 1 | Nombre, materia, Tarea 3.1. "Voy a automatizar altas y bajas de usuarios y aplicar políticas de acceso." | — | — |
+| 2 | "Este es el lote de usuarios: tres departamentos con distintos roles." | `cat data/usuarios.csv` | Encabezado y 8 usuarios (ana.torres … jorge.cano) |
+| 3 | "Ejecuto la creación por lotes: grupos, usuarios, sudo, horarios y bloqueo." | `sudo bash scripts/00_ejecutar_todo.sh` | Muchas líneas `[ OK ]`; al final, la validación con `Pruebas que pasaron: 10` |
+| 4 | "Pedro tiene como grupo principal Finanzas y como secundario empleados." | `id pedro.ruiz` | `gid=3002(finanzas) grupos=3002(finanzas),3010(empleados)` |
+| 5 | "Su contraseña es temporal, caduca a los 90 días y la cuenta tiene fecha de expiración." | `sudo chage -l pedro.ruiz` | *se debe cambiar la contraseña*, máximo **90**, mínimo **1**, aviso **7**, cuenta caduca **jun 30, 2027** |
+| 6 | "El grupo Finanzas existe con el GID 3002." | `getent group finanzas` | `finanzas:x:3002:` (la lista final sale **vacía**; ver explicación 6) |
+| 7 | "Las contraseñas temporales solo las puede leer root." | `sudo cat /root/tarea31_credenciales.csv` | Una línea por usuario con su contraseña temporal. **Copia la de laura.mena** |
+| 8 | **Contraseña forzada.** "Entro como laura.mena y el sistema me obliga a cambiar la contraseña." | `su - laura.mena` → pega la temporal; luego otra vez la temporal y dos veces la nueva (ej. `Operacion2026#Laura`) | *Es necesario cambiar su contraseña inmediatamente*; al final el prompt cambia a `laura.mena@...` |
+| 9 | **Aislamiento.** "Los homes son privados: laura no puede entrar al de pedro." | `ls -ld /home/*` · `ls /home/pedro.ruiz` ✗ | `drwx------` en cada home · *no se puede abrir el directorio '/home/pedro.ruiz': Permiso denegado* |
+| 10 | **sudo limitado.** "Operaciones solo tiene permitidos comandos puntuales: actualizar paquetes sí, leer contraseñas no." | `sudo apt update` ✓ · `sudo cat /etc/shadow` ✗ · `exit` | Pide la contraseña **nueva** de laura; luego `Obj:` / `Des:` y *Leyendo lista de paquetes… Hecho* · rechazo de sudo (*I'm sorry laura.mena. I'm afraid I can't do that*) · `exit` regresa al administrador |
+| 11 | **Horario.** "jorge.cano pertenece a horario_prueba: nunca puede iniciar sesión, aunque su contraseña sea correcta." | `su - jorge.cano` ✗ (pon su contraseña temporal) · `grep -A8 TAREA31 /etc/security/time.conf` | `su: Permiso denegado` · las reglas: finanzas `Wk0800-1800`, operaciones `Al0600-2200`, horario_prueba `!Al0000-2400`. **Sin `exit`** |
+| 12 | **Bloqueo.** "Tres contraseñas incorrectas bloquean la cuenta 5 minutos." | `su - carlos.vega` 3 veces con contraseña **mala** · 4.º intento con la **correcta** ✗ · `sudo faillock --user carlos.vega` · `sudo faillock --user carlos.vega --reset` | `su: Fallo de autenticación` ×3 · 4.º: *la cuenta está bloqueada debido a 3 inicios de sesión fallidos* · tabla con 3 intentos · el reset no muestra nada. **Sin `exit`** |
+| 13 | **Baja.** "Doy de baja a sofia.diaz: la cuenta queda bloqueada pero se conservan sus archivos." | `sudo bash scripts/03_baja_usuarios.sh sofia.diaz` · `su - sofia.diaz` ✗ | `[ OK ] sofia.diaz deshabilitado (contrasena bloqueada, cuenta expirada, shell nologin)` · `su: Fallo de autenticación`. **Sin `exit`** |
+| 14 | **Validación final.** "Este script comprueba de forma automática el aislamiento y los permisos." | `sudo bash scripts/99_validar.sh` | 10 líneas `[PASA]` y `Pruebas que pasaron: 10   Pruebas que fallaron: 0` |
+| 15 | Cierre: "Con esto se automatizan las altas y bajas y se aplican las directivas de seguridad." | — | — |
 
 ## 🎙️ Qué decir en cada paso
 
@@ -54,37 +56,33 @@ Texto para cuando te grabes explicando el video. Los números corresponden a los
 
 **1.** Hola, soy Josué Javier Álvarez Valle, de la materia Administración de Servidores. En este video presento la Tarea 3.1: automatizar la creación y la baja de usuarios y grupos en Linux, y aplicar directivas de seguridad como privilegios de sudo, horarios de acceso y bloqueo por intentos fallidos.
 
-**2.** Los usuarios no se crean uno por uno: se cargan desde este archivo CSV. Cada fila tiene el usuario, su nombre, el departamento, el rol y la fecha en que expira la cuenta. Hay tres departamentos: Sistemas, Finanzas y Operaciones.
+**2.** Los usuarios no se crean uno por uno: se cargan desde este archivo CSV. Cada fila tiene el usuario, su nombre, el departamento, el rol, grupos extra y la fecha en que expira la cuenta. Hay tres departamentos: Sistemas, Finanzas y Operaciones.
 
-**3.** Ejecuto el script principal, que hace todo en orden: crea los grupos y las carpetas de cada departamento, da de alta a los usuarios del CSV y configura sudo según el rol, los horarios de acceso y el bloqueo de cuentas. Cada paso muestra OK cuando termina bien.
+**3.** Ejecuto el script principal, que hace todo en orden: crea los grupos y las carpetas de cada departamento, da de alta a los usuarios del CSV y configura sudo según el rol, los horarios de acceso y el bloqueo de cuentas. Cada paso muestra OK cuando termina bien, y al final se ejecuta una primera validación.
 
-**4.** Con el comando id compruebo los grupos. Ana tiene como grupo principal Sistemas y, por ser jefa, también pertenece a jefes y admin_ti. Pedro es de Finanzas y solo tiene los grupos de un empleado normal.
+**4.** Con el comando id reviso a Pedro: su grupo principal es finanzas, que es su departamento, y además pertenece a empleados, el grupo que tienen todos los trabajadores.
 
-**5.** Con chage veo la política de contraseñas: el cambio es obligatorio en el primer inicio de sesión, la contraseña caduca a los 90 días, avisa siete días antes y la cuenta tiene fecha de expiración.
+**5.** Con chage veo la política de contraseñas de Pedro: dice que debe cambiar la contraseña, porque la que le dio el sistema es temporal; la contraseña caduca a los 90 días, avisa siete días antes y la cuenta tiene una fecha de expiración.
 
-**6.** Cada carpeta personal tiene permisos 700: solo su dueño puede entrar, así ningún usuario puede leer los archivos de otro.
+**6.** Con getent compruebo que el grupo finanzas existe con el número 3002. La lista de integrantes sale vacía porque María, Pedro y Sofía lo tienen como grupo principal, y Linux no repite en esta línea a quienes lo tienen como principal. Lo vimos con el comando id: Pedro sí pertenece a finanzas.
 
-**7.** Las contraseñas temporales que generó el script quedan en este archivo, que solo root puede leer. Son las que se entregarían a cada empleado.
+**7.** Las contraseñas temporales que generó el script quedan en este archivo, que solo root puede leer. Son las que se entregarían a cada empleado. Copio la de Laura para la siguiente prueba.
 
-**8.** Inicio sesión como luis.rios con su contraseña temporal. El sistema no me deja continuar hasta que la cambio por una nueva, así nadie se queda con la contraseña que le dio el administrador.
+**8.** Inicio sesión como laura.mena, de Operaciones, con su contraseña temporal. El sistema no me deja continuar hasta que la cambio por una nueva, así nadie se queda con la contraseña que le dio el administrador.
 
-**9.** Como Luis intento entrar a la carpeta de Pedro y a la de Finanzas, y en ambos casos aparece Permiso denegado. En cambio, sí puedo crear un archivo en la carpeta de Sistemas, que es su departamento.
+**9.** Ya como Laura, listo las carpetas personales: todas tienen permisos drwx------, es decir, 700, solo su dueño puede entrar. Por eso, cuando intento abrir la carpeta de Pedro, aparece Permiso denegado.
 
-**10.** Luis es técnico, así que sudo solo le permite comandos de soporte, como actualizar la lista de paquetes. Cuando intenta leer el archivo de contraseñas /etc/shadow, sudo se lo niega.
+**10.** Ahora pruebo sudo. Operaciones solo tiene permitidos dos comandos de mantenimiento: reiniciar el servicio cron y actualizar la lista de paquetes. Por eso sudo apt update sí funciona. Pero cuando Laura intenta leer /etc/shadow, el archivo donde están las contraseñas cifradas, sudo se lo niega. Así cada rol tiene solo los privilegios que necesita. Con exit regreso al administrador.
 
-**11.** Ana es jefa de Sistemas y pertenece a admin_ti, que tiene sudo completo. Por eso ella sí puede leer /etc/shadow.
+**11.** Ahora intento entrar como jorge.cano. Escribo su contraseña correcta y aun así el sistema responde Permiso denegado. Esto pasa porque Jorge pertenece al grupo horario_prueba. Las reglas están en /etc/security/time.conf: Finanzas solo puede entrar de lunes a viernes de 8 a 18 horas, Operaciones todos los días de 6 a 22, y horario_prueba nunca.
 
-**12.** Pedro, de Finanzas, no tiene ningún privilegio de sudo: el sistema indica que no puede ejecutar nada como administrador.
+**12.** Ahora pruebo el bloqueo con carlos.vega: escribo tres veces una contraseña incorrecta. En el cuarto intento, aunque la contraseña es correcta, la cuenta ya está bloqueada por cinco minutos. Como administrador, con faillock veo los tres intentos fallidos registrados, y con la opción reset desbloqueo la cuenta.
 
-**13.** Las reglas de horario están en /etc/security/time.conf. Finanzas solo puede entrar de lunes a viernes de 8 a 18 horas, y el grupo horario_prueba no puede entrar nunca. Por eso, aunque escribo la contraseña correcta de Jorge, el acceso se niega.
+**13.** Para dar de baja a Sofía, el script bloquea su contraseña, expira la cuenta y le quita la terminal, pero no la borra, así se conservan sus archivos. Si intento entrar como ella, el sistema no lo permite.
 
-**14.** Ahora pruebo el bloqueo: escribo tres veces una contraseña incorrecta para Ana. En el cuarto intento, aunque la contraseña es correcta, la cuenta ya está bloqueada. Con faillock veo los intentos fallidos y, como administrador, la desbloqueo para que pueda volver a entrar.
+**14.** Por último, el script de validación hace pruebas automáticas de aislamiento y permisos, por ejemplo que un usuario no pueda entrar al home de otro ni a la carpeta de otro departamento, y todas aparecen como PASA.
 
-**15.** Para dar de baja a Sofía, el script bloquea su cuenta en lugar de borrarla, así se conservan sus archivos. passwd muestra la letra L de bloqueada, y si intento entrar como ella, no puedo.
-
-**16.** Por último, el script de validación hace pruebas automáticas de aislamiento y permisos, y todas aparecen como PASA.
-
-**17.** Con esto queda automatizada la administración de usuarios y grupos, y aplicadas las directivas de seguridad: privilegios por rol, horarios de acceso y bloqueo de cuentas. Gracias.
+**15.** Con esto queda automatizada la administración de usuarios y grupos, y aplicadas las directivas de seguridad: privilegios por rol, horarios de acceso y bloqueo de cuentas. Gracias.
 
 ## D. Después de grabar
 
@@ -95,7 +93,8 @@ Texto para cuando te grabes explicando el video. Los números corresponden a los
 
 - pasos 3, 4, 5 y 6;
 - el cambio forzado (8);
-- los "Permiso denegado" (9 y 13);
-- `sudo -l` de los tres roles (10, 11 y 12);
-- el bloqueo (14);
-- la validación con 10 PASA (16).
+- los "Permiso denegado" (9 y 11);
+- sudo permitido y negado (10);
+- el bloqueo (12);
+- la baja (13);
+- la validación con 10 PASA (14).
