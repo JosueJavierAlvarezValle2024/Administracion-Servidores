@@ -7,3 +7,6 @@
 # Temporales de Windows y Office
 *.tmp
 ~$*
+
+# Guiones de video (solo para uso personal, no se suben)
+guion_video.md
